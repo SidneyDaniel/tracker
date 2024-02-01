@@ -1,85 +1,66 @@
-<script setup lang="ts">
-import { RouterLink, RouterView } from 'vue-router'
-import HelloWorld from './components/HelloWorld.vue'
+<script lang="ts">
+import { defineComponent } from 'vue';
+import BarraLateral from './components/barraLateral.vue'
+import Formulario from './components/Formulario.vue'
+import Tarefa from './components/Tarefas.vue'
+import type ITarefa from './interface/ITarefa'
+import Box from './components/Box.vue';
+
+export default defineComponent({
+  name: 'App',
+  components: { BarraLateral, Formulario, Tarefa, Box },
+  data () {
+    return {
+      tarefas: [] as ITarefa[],
+      modoEscuroAtivo: false
+    }
+  },computed: { 
+    listaEstaVazia() :boolean{ 
+      return this.tarefas.length === 0;
+    }
+  },
+  methods: {
+    salvarTarefa (tarefa: ITarefa) {
+      this.tarefas.push(tarefa)
+    },
+    trocarTema(modoEscuroAtivo :boolean){
+      this.modoEscuroAtivo = modoEscuroAtivo;
+    }
+  }
+});
 </script>
 
 <template>
-  <header>
-    <img alt="Vue logo" class="logo" src="@/assets/logo.svg" width="125" height="125" />
-
-    <div class="wrapper">
-      <HelloWorld msg="You did it!" />
-
-      <nav>
-        <RouterLink to="/">Home</RouterLink>
-        <RouterLink to="/about">About</RouterLink>
-      </nav>
+  <main class="columns is-gapless is-multiline" :class="{ 'modo-escuro' :modoEscuroAtivo }">
+    <div class="column is-one-quarter">
+      <BarraLateral @aoTemaAlterado="trocarTema"/>
     </div>
-  </header>
-
-  <RouterView />
+    <div class="column is-three-quarter conteudo conteudo">
+      <Formulario @aoSalvarTarefa="salvarTarefa"/>
+      <div class="lista">
+        <Tarefa v-for="(tarefa, index) in tarefas" :key="index" :tarefa="tarefa"/>
+        <Box v-if="listaEstaVazia">Você não está muito produtivo hoje 😢</Box>
+      </div>
+    </div>
+  </main>
 </template>
 
-<style scoped>
-header {
-  line-height: 1.5;
-  max-height: 100vh;
+<style>
+.lista {
+  padding: 1.25rem;
 }
 
-.logo {
-  display: block;
-  margin: 0 auto 2rem;
+main{
+  --br-primario: #fff;
+  --texto-primario: #000;
 }
 
-nav {
-  width: 100%;
-  font-size: 12px;
-  text-align: center;
-  margin-top: 2rem;
+main.modo-escuro{
+  --br-primario: #2b2d42;
+  --texto-primario: #ddd;
 }
 
-nav a.router-link-exact-active {
-  color: var(--color-text);
-}
-
-nav a.router-link-exact-active:hover {
-  background-color: transparent;
-}
-
-nav a {
-  display: inline-block;
-  padding: 0 1rem;
-  border-left: 1px solid var(--color-border);
-}
-
-nav a:first-of-type {
-  border: 0;
-}
-
-@media (min-width: 1024px) {
-  header {
-    display: flex;
-    place-items: center;
-    padding-right: calc(var(--section-gap) / 2);
-  }
-
-  .logo {
-    margin: 0 2rem 0 0;
-  }
-
-  header .wrapper {
-    display: flex;
-    place-items: flex-start;
-    flex-wrap: wrap;
-  }
-
-  nav {
-    text-align: left;
-    margin-left: -1rem;
-    font-size: 1rem;
-
-    padding: 1rem 0;
-    margin-top: 1rem;
-  }
+.conteudo{
+  background-color: var(--br-primario);
 }
 </style>
