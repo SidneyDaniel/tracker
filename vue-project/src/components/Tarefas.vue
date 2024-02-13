@@ -20,8 +20,11 @@ export default defineComponent({
 <template>
     <Box>
         <div class="columns">
-            <div class="columns is-7">
+            <div class="columns is-4">
                 {{ tarefa.descricao || 'Tarefa sem descrição' }}
+            </div>
+            <div class="column is-3">
+                {{ tarefa.projeto?.nome || 'N/d' }}
             </div>
         </div>
         <div class="colum">

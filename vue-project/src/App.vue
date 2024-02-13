@@ -2,10 +2,11 @@
 import { defineComponent } from 'vue';
 import BarraLateral from './components/barraLateral.vue'
 import { RouterView } from 'vue-router';
+import NotificacoesVue from './views/Projetos/Notificacoes.vue';
 
 export default defineComponent({
   name: 'App',
-  components: { BarraLateral },
+  components: { BarraLateral, NotificacoesVue },
   data () {
     return {
       modoEscuroAtivo: false
@@ -25,6 +26,7 @@ export default defineComponent({
       <BarraLateral @aoTemaAlterado="trocarTema"/>
     </div>
     <div class="column is-three-quarter conteudo conteudo">
+      <NotificacoesVue></NotificacoesVue>
       <RouterView></RouterView>
     </div>
   </main>
